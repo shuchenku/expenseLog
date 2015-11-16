@@ -1,4 +1,4 @@
-package com.cosi153a.todopro;
+package com.cosi153a.expenseLog;
 
 import org.junit.Test;
 

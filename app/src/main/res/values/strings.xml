@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">ToDoPro</string>
+    <string name="app_name">ExpenseLog</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
-    <string name="title">Title</string>
+    <string name="title">Title:</string>
     <string name="details">Details:</string>
 </resources>

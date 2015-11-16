@@ -1,4 +1,4 @@
-package com.cosi153a.todopro.db;
+package com.cosi153a.expenseLog.db;
 
 /**
  * Created by apple on 10/21/15.
@@ -21,7 +21,7 @@ public class TaskDBHelper extends SQLiteOpenHelper {
                 String.format("CREATE TABLE %s (" +
                                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                 "%s TEXT, " + "%s TEXT)", TaskContract.TABLE,
-                        TaskContract.Columns.TASK, TaskContract.Columns.DETAILS);
+                        TaskContract.Columns.TITLE, TaskContract.Columns.DETAILS);
 
         Log.d("TaskDBHelper","Query to form table: "+sqlQuery);
         sqlDB.execSQL(sqlQuery);

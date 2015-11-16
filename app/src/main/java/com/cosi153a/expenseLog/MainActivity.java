@@ -1,8 +1,6 @@
-package com.cosi153a.todopro;
+package com.cosi153a.expenseLog;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,8 +12,8 @@ import android.view.View;
 import android.widget.*;
 import android.app.ListActivity;
 
-import com.cosi153a.todopro.db.TaskContract;
-import com.cosi153a.todopro.db.TaskDBHelper;
+import com.cosi153a.expenseLog.db.TaskContract;
+import com.cosi153a.expenseLog.db.TaskDBHelper;
 
 public class MainActivity extends ListActivity {
 
@@ -42,25 +40,11 @@ public class MainActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_task:
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setTitle("Add a task");
-//                builder.setMessage("What do you want to do?");
-//                final EditText inputField = new EditText(this);
-//                builder.setView(inputField);
-//                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        String task = inputField.getText().toString();
-//                        Log.d("MainActivity", task);
 
-                Intent intent = new Intent(MainActivity.this,NewToDoActivity.class);
+                Intent intent = new Intent(MainActivity.this,NewExpenseActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
 
                 updateUI();
-//                });
-//                builder.setNegativeButton("Cancel",null);
-//
-//                builder.create().show();
                 return true;
 
             default:
@@ -77,9 +61,8 @@ public class MainActivity extends ListActivity {
         {
             if (resultCode == ListActivity.RESULT_OK )
             {
-                final String title = iData.getExtras().getString("TITLE");
-                final String details = iData.getExtras().getString("DETAILS");
-
+                String title = iData.getExtras().getString("TITLE");
+                String details = iData.getExtras().getString("DETAILS");
 
                 Log.v(TAG,title+details);
                 helper = new TaskDBHelper(MainActivity.this);
@@ -87,12 +70,10 @@ public class MainActivity extends ListActivity {
                 ContentValues values = new ContentValues();
 
                 values.clear();
-                values.put(TaskContract.Columns.TASK, title);
+                values.put(TaskContract.Columns.TITLE, title);
                 values.put(TaskContract.Columns.DETAILS, details);
                 db.insertWithOnConflict(TaskContract.TABLE, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
-//                Log.v( TAG, "Retrieved Value zData is "+zData );
-                //..logcats "Retrieved Value zData is returnValueAsString"
 
                 updateUI();
 
@@ -105,16 +86,14 @@ public class MainActivity extends ListActivity {
         helper = new TaskDBHelper(MainActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
         Cursor cursor = sqlDB.query(TaskContract.TABLE,
-                new String[]{TaskContract.Columns._ID, TaskContract.Columns.TASK},
+                new String[]{TaskContract.Columns._ID, TaskContract.Columns.TITLE},
                 null,null,null,null,null);
-
-
 
         ListAdapter listAdapter = new SimpleCursorAdapter(
                 this,
-                R.layout.task_view,
+                R.layout.expense_detail,
                 cursor,
-                new String[] { TaskContract.Columns.TASK},
+                new String[] { TaskContract.Columns.TITLE},
                 new int[] { R.id.taskTextView},
                 0
         );
@@ -130,9 +109,8 @@ public class MainActivity extends ListActivity {
 
         String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
                 TaskContract.TABLE,
-                TaskContract.Columns.TASK,
+                TaskContract.Columns.TITLE,
                 task);
-
 
         helper = new TaskDBHelper(MainActivity.this);
         SQLiteDatabase sqlDB = helper.getWritableDatabase();

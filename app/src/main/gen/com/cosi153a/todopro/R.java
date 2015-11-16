@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.cosi153a.todopro;
+package com.cosi153a.expenseLog;
 
 public final class R {
     public static final class attr {
