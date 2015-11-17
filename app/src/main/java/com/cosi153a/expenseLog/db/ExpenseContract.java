@@ -5,14 +5,15 @@ package com.cosi153a.expenseLog.db;
  */
 import android.provider.BaseColumns;
 
-public class TaskContract {
+public class ExpenseContract {
     public static final String DB_NAME = "com.cosi153a.expenseLog.db";
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 1;
     public static final String TABLE = "tasks";
 
     public class Columns {
         public static final String TITLE = "title";
         public static final String DETAILS = "details";
+        public static final String DATE = "date";
         public static final String _ID = BaseColumns._ID;
     }
 }

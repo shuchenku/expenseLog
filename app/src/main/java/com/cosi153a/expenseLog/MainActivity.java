@@ -12,12 +12,15 @@ import android.view.View;
 import android.widget.*;
 import android.app.ListActivity;
 
-import com.cosi153a.expenseLog.db.TaskContract;
-import com.cosi153a.expenseLog.db.TaskDBHelper;
+import com.cosi153a.expenseLog.db.ExpenseContract;
+import com.cosi153a.expenseLog.db.ExpenseDBHelper;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends ListActivity {
 
-    private TaskDBHelper helper;
+    private ExpenseDBHelper helper;
     public static final int REQUEST_CODE = 1111;
     public static final String TAG = "MainActivity";
 
@@ -65,36 +68,38 @@ public class MainActivity extends ListActivity {
                 String details = iData.getExtras().getString("DETAILS");
 
                 Log.v(TAG,title+details);
-                helper = new TaskDBHelper(MainActivity.this);
+                helper = new ExpenseDBHelper(MainActivity.this);
                 SQLiteDatabase db = helper.getWritableDatabase();
                 ContentValues values = new ContentValues();
+                SimpleDateFormat now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date();
 
                 values.clear();
-                values.put(TaskContract.Columns.TITLE, title);
-                values.put(TaskContract.Columns.DETAILS, details);
-                db.insertWithOnConflict(TaskContract.TABLE, null, values,
+                values.put(ExpenseContract.Columns.TITLE, title);
+                values.put(ExpenseContract.Columns.DETAILS, details);
+                values.put(ExpenseContract.Columns.DATE, now.format(date));
+                db.insertWithOnConflict(ExpenseContract.TABLE, null, values,
                         SQLiteDatabase.CONFLICT_IGNORE);
 
                 updateUI();
 
             }
         }
-
     }
 
     private void updateUI() {
-        helper = new TaskDBHelper(MainActivity.this);
+        helper = new ExpenseDBHelper(MainActivity.this);
         SQLiteDatabase sqlDB = helper.getReadableDatabase();
-        Cursor cursor = sqlDB.query(TaskContract.TABLE,
-                new String[]{TaskContract.Columns._ID, TaskContract.Columns.TITLE},
+        Cursor cursor = sqlDB.query(ExpenseContract.TABLE,
+                new String[]{ExpenseContract.Columns._ID, ExpenseContract.Columns.TITLE, ExpenseContract.Columns.DETAILS, ExpenseContract.Columns.DATE},
                 null,null,null,null,null);
 
         ListAdapter listAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.expense_detail,
                 cursor,
-                new String[] { TaskContract.Columns.TITLE},
-                new int[] { R.id.taskTextView},
+                new String[] { ExpenseContract.Columns.TITLE, ExpenseContract.Columns.DETAILS, ExpenseContract.Columns.DATE},
+                new int[] { R.id.TitleView, R.id.DetailsView, R.id.DateView},
                 0
         );
 
@@ -104,15 +109,15 @@ public class MainActivity extends ListActivity {
 
     public void onDoneButtonClick(View view) {
         View v = (View) view.getParent();
-        TextView taskTextView = (TextView) v.findViewById(R.id.taskTextView);
-        String task = taskTextView.getText().toString();
+        TextView ExpenseView = (TextView) v.findViewById(R.id.TitleView);
+        String task = ExpenseView.getText().toString();
 
         String sql = String.format("DELETE FROM %s WHERE %s = '%s'",
-                TaskContract.TABLE,
-                TaskContract.Columns.TITLE,
+                ExpenseContract.TABLE,
+                ExpenseContract.Columns.TITLE,
                 task);
 
-        helper = new TaskDBHelper(MainActivity.this);
+        helper = new ExpenseDBHelper(MainActivity.this);
         SQLiteDatabase sqlDB = helper.getWritableDatabase();
         sqlDB.execSQL(sql);
         updateUI();
