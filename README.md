@@ -1,6 +1,6 @@
 # expenseLog
 
-Decisions I made to when writing ExpenseLog (some are different from HW requirements but the TA said it is OK):
+Decisions I made when writing ExpenseLog (some are different from HW requirements but the TA said it is OK):
 
 I accidentally implemented HW3 (of course, before knowing what HW3 is about). I was under the understanding that the ExpenseLog app would be useless if data weren't persistant. So I used sqlite along with SimpleCursorAdaptor to achieve the same (almost) functionality.
 
